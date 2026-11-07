@@ -1,18 +1,208 @@
+
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"> </script>
-     <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
-  </head>
-  <body>
-    <a-scene>
-      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-      <a-plane position="0 0.1 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-      <!-- <a-sky color="#ECECEC"></a-sky> -->
-      <!-- the enviroment entity includes a sky. Choose from the presets"none, default, contact, egypt, checkerboard, forest, goaland, yavapai, goldmine, threetowers, poison, arches, tron, japan, dream, volcano, starry, osiris, moon" -->
-      <a-entity environment="preset: forest; dressingAmount: 500"></a-entity>
-    </a-scene>
-  </body>
+<head>
+    <meta charset="UTF-8">
+
+    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
+
+    
+<script>
+    AFRAME.registerComponent("snowman-fall", {
+        init: function () {
+            this.snowman = document.querySelector("#snowman");
+            this.time = 0;
+            this.broken = false;
+            this.pieces = [];
+        },
+
+        tick: function (time, delta) {
+            const dt = delta / 1000;
+            this.time += dt;
+
+            if (this.broken) {
+                this.pieces.forEach(part => {
+                    if (part.object3D.position.y > 2.3) {
+                        part.object3D.position.y -= 5 * dt;
+                    }
+                });
+                return;
+            }
+
+            const snow = this.snowman.object3D;
+            const t = this.time - 1.5;
+
+            if (t < 0) return;
+
+            if (t < 2.5) {
+                snow.position.x = t * 2.2;
+            }
+
+            else if (t < 3.7) {
+                snow.position.x += 2 * dt;
+                snow.position.y -= 3 * dt;
+                snow.rotation.z -= 0.2 * dt;
+            }
+
+            else {
+                snow.position.x += 2 * dt;
+                snow.position.y -= 9 * dt;
+
+                if (snow.position.y <= 2.6) {
+                    this.breakSnowman();
+                }
+            }
+        },
+
+        breakSnowman: function () {
+            this.broken = true;
+
+            const snow = this.snowman;
+
+            while (snow.children.length > 0) {
+                const part = snow.children[0];
+
+                const position = new THREE.Vector3();
+                part.object3D.getWorldPosition(position);
+
+                snow.removeChild(part);
+                this.el.appendChild(part);
+
+                part.object3D.position.copy(position);
+
+                part.object3D.position.x += (Math.random() - 0.5) * 4;
+                part.object3D.position.z += (Math.random() - 0.5) * 4;
+
+                this.pieces.push(part);
+            }
+
+            snow.remove();
+        }
+    });
+</script>
+
+</head>
+
+<body>
+<a-scene snowman-fall>
+
+    <!-- Camera -->
+    <a-camera
+        position="4 11 29"
+        rotation="-6 0 0">
+    </a-camera>
+
+    <!-- Ground -->
+    <a-plane
+        id="ground"
+        position="0 2 -5"
+        rotation="-90 0 0"
+        width="100"
+        height="100"
+        color="#101010">
+    </a-plane>
+
+    <!-- Rock: radius 7 -->
+    <a-dodecahedron
+        id="rock"
+        position="0 7 -5"
+        radius="7"
+        color="#FF926B"
+        flat-shading="true">
+    </a-dodecahedron>
+
+    <!-- Snowman -->
+    <a-entity
+        id="snowman"
+        position="0 14 -5">
+
+        <!-- Bottom snowball -->
+        <a-sphere
+            position="0 0 0"
+            radius="0.6"
+            color="#FFFFFF">
+        </a-sphere>
+
+        <!-- Middle snowball -->
+        <a-sphere
+            position="0 0.9 0"
+            radius="0.4"
+            color="#FFFFFF">
+        </a-sphere>
+
+        <!-- Head -->
+        <a-sphere
+            position="0 1.525 0"
+            radius="0.3"
+            color="#FFFFFF">
+        </a-sphere>
+
+        <!-- Carrot nose -->
+        <a-cone
+            position="0 1.5 0.3"
+            rotation="90 0 0"
+            radius-bottom="0.075"
+            radius-top="0"
+            height="0.4"
+            color="#FFA500">
+        </a-cone>
+
+        <!-- Eyes -->
+        <a-sphere
+            position="-0.1 1.625 0.27"
+            radius="0.04"
+            color="#000000">
+        </a-sphere>
+
+        <a-sphere
+            position="0.1 1.625 0.27"
+            radius="0.04"
+            color="#000000">
+        </a-sphere>
+
+        <!-- Hat brim -->
+        <a-cylinder
+            position="0 1.8 0"
+            radius="0.4"
+            height="0.05"
+            color="#000000">
+        </a-cylinder>
+
+        <!-- Hat top -->
+        <a-cylinder
+            position="0 2 0"
+            radius="0.275"
+            height="0.35"
+            color="#000000">
+        </a-cylinder>
+
+        <!-- Right arm -->
+        <a-cylinder
+            position="0.6 0.65 0.25"
+            rotation="45 -135 0"
+            radius="0.04"
+            height="1"
+            color="#895129">
+        </a-cylinder>
+
+        <!-- Left arm -->
+        <a-cylinder
+            position="-0.6 0.65 0.25"
+            rotation="45 135 0"
+            radius="0.04"
+            height="1"
+            color="#895129">
+        </a-cylinder>
+
+    </a-entity>
+
+    <!-- Egyptian environment -->
+    <a-entity
+        environment="preset: egypt; dressingAmount: 500">
+    </a-entity>
+
+</a-scene>
+</body>
 </html>
+
