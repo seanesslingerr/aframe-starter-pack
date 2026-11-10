@@ -10,6 +10,10 @@
       <a-assets>
        <img id="sky" src="./assets/sky.jpg">
        <img id="sand" src="./assets/sand.jpg">
+       <img id="bark" src="./assets/bark.jpg">
+       <img id="leaf" src="./assets/leaf.jpg">
+       <img id="ocean" src="./assets/ocean.jpg">
+       <img id="beachball" src="./assets/redWhite.jpg">
       </a-assets>
 
   <a-sky src="#sky"></a-sky>
@@ -18,9 +22,9 @@
   <a-plane
     position="0 0 -4"
     rotation="-90 0 0"
-    width="30"
-    height="30"
-    color="#4FC3F7">
+    width="200"
+    height="200"
+    src="#ocean">
   </a-plane>
 
   <!-- Island base: overlapping sand shapes -->
@@ -28,23 +32,23 @@
     position="0 0.05 -4"
     radius="3.2"
     height="0.12"
-    color="#F4D6A0"
-    scale="1.4 1 1">
+    scale="1.4 1 1"
+    src="#sand">
   </a-cylinder>
 
   <a-cylinder
     position="1.8 0.051 -3.3"
     radius="2"
     height="0.12"
-    color="#F4D6A0"
-    scale="1.2 1 0.9">
+    scale="1.2 1 0.9"
+    src="#sand">
   </a-cylinder>
 
   <a-cylinder
     position="-1.8 0.052 -4.8"
     radius="1.8"
     height="0.12"
-    color="#F4D6A0"
+    src="#sand"
     scale="1.1 1 1.3">
   </a-cylinder>
 
@@ -52,16 +56,23 @@
     position="0.6 0.053 -5.8"
     radius="1.5"
     height="0.12"
-    color="#F4D6A0"
-    scale="1.4 1 0.8">
+    scale="1.4 1 0.8"
+    src="#sand">
   </a-cylinder>
+
+  <!-- beach ball -->
+   <a-sphere
+    position="0.5 0.35 -3.5"
+    radius="0.4"
+    src="#beachball">
+  </a-sphere>
 
   <!-- Palm tree -->
   <a-cylinder
     position="-1 1 -3.8"
     radius="0.12"
     height="2"
-    color="#8B5A2B">
+    src="#bark">
   </a-cylinder>
 
   <a-cone
@@ -70,7 +81,7 @@
     radius-top="0.05"
     height="1"
     rotation="0 0 90"
-    color="green">
+    src="#leaf">
   </a-cone>
 
   <a-cone
@@ -79,7 +90,7 @@
     radius-top="0.05"
     height="1"
     rotation="0 60 90"
-    color="green">
+    src="#leaf">
   </a-cone>
 
   <a-cone
@@ -88,10 +99,10 @@
     radius-top="0.05"
     height="1"
     rotation="0 120 90"
-    color="green">
+    src="#leaf">
   </a-cone>
 
-  <a-camera position="0 1.6 4"></a-camera>
+  <a-camera position="0 1.6 -1.5"></a-camera>
 </a-scene>
   </body>
 </html>
